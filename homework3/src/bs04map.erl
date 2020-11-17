@@ -8,28 +8,28 @@ decode(<<X,Json/binary>>, map) when X==$\n; X==$\s ->
     decode(Json, map).
 
 key_val_parse(<<X,Bin/binary>>,Key,Map)when X==$,;X==$\s; X==$\n ; X==$:->
-            key_val_parse(Bin,Key,Map);
+    key_val_parse(Bin,Key,Map);
 key_val_parse(<<"\"",_Rest/binary>>=Val,<<>>,Map) ->
     {Rest,Value}=parse_value(Val),
-        key_val_parse(Rest,Value,Map);
+    key_val_parse(Rest,Value,Map);
 key_val_parse(<<"}",Rest/binary>>,_Key,Map) ->
     {Rest,Map};
 key_val_parse(Bin,Key,Map) ->
     {Rest,Value}=parse_value(Bin),
-         key_val_parse(Rest,<<>>, maps:put(Key,Value,Map)).
+    key_val_parse(Rest,<<>>, maps:put(Key,Value,Map)).
 
 parse_value(<<X/utf8, _Rest/binary>>=Binary) when X>=$0, X=<$9->
-         parse_num(Binary,<<>>);
+    parse_num(Binary,<<>>);
 parse_value(<<"\"", Rest/binary>>) ->
-         parse_string(Rest,<<>>);
+    parse_string(Rest,<<>>);
 parse_value(<<"true",Rest/binary>>) ->
-         {Rest,true};
+    {Rest,true};
 parse_value(<<"false",Rest/binary>>) ->
-         {Rest,false};
+    {Rest,false};
 parse_value(<<"[",Bin/binary>>) ->
-         massiv_parse(Bin,[]);
+    massiv_parse(Bin,[]);
 parse_value(<<"{",Bin/binary>>) ->
-         key_val_parse(Bin,<<>>,#{}).
+    key_val_parse(Bin,<<>>,#{}).
 
 parse_num(<<X/utf8,Rest/binary>>,Acc) when X>=$0, X=<$9 ->
     parse_num(Rest,<<Acc/binary,X/utf8>>);
