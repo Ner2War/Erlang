@@ -17,7 +17,7 @@ lookup(TableName, Key) ->
     Time = ?CURRENT_TIME,
     case ets:lookup(TableName, Key) of
         [#cache_lifetime{object=Sell, life_time=LifeTime}] when LifeTime > Time ->
-            {ok, Sell};
+        {ok, Sell};
         _ -> {ok, []}                    
     end.
 
