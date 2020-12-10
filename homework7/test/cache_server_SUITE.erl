@@ -37,8 +37,8 @@ lookup(_Config) ->
 lookup_by_date(_Config) ->
     {ok, _Pid} = cache_server:start_link(test, [{drop_interval, 3600}]),
     ok = cache_server:insert(test, key1, value1, 60),
-    DateFrom = {{2020,1,1},{00,00,00}},
-    DateTo = {{2021,1,10},{23,59,59}},
-    {ok, [value1]} = cache_server:lookup_by_date(test, DateFrom, DateTo).
+    DateFrom = {{2015,1,1},{00,00,00}},
+    DateTo = {{2025,1,1},{00,00,00}},
+    {ok,[[{<<"key">>,key1},{<<"value">>,value1}]]} = cache_server:lookup_by_date(test, DateFrom, DateTo).
 
 
